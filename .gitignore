@@ -1,0 +1,30 @@
+# Python bytecode and build
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+
+# Environments
+.env
+.venv/
+venv/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Databases
+*.db
+*.sqlite
+*.sqlite3
+BookManagementAPI/books.db
+
+# OS cruft
+.DS_Store
+Thumbs.db
+
+# Node (if experimenting)
+node_modules/
