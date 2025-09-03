@@ -69,6 +69,3 @@ python app.py  # or the main script for each project
 ## About
 
 These projects were built as learning exercises and portfolio pieces. They demonstrate practical programming skills and clean, maintainable code practices. Each project solves real-world problems and shows progression in different areas of software development.
-
----
-*Built with  for learning and growth*
