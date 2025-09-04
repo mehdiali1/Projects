@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Application - Job Application Tracker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f5f7fa;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(79, 70, 229, 0.3);
+        }
+
+        .nav {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .nav a {
+            padding: 0.75rem 1.5rem;
+            background: white;
+            color: #4f46e5;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .nav a:hover, .nav a.active {
+            background: #4f46e5;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
+
+        .form-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        .form-header {
+            padding: 2rem;
+            background: #f9fafb;
+            border-bottom: 1px solid #e5e7eb;
+            text-align: center;
+        }
+
+        .form-header h2 {
+            color: #374151;
+            margin-bottom: 0.5rem;
+            font-size: 1.5rem;
+        }
+
+        .form-header p {
+            color: #6b7280;
+        }
+
+        .form-content {
+            padding: 2rem;
+        }
+
+        .form-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .required {
+            color: #dc2626;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="url"],
+        input[type="date"],
+        input[type="tel"],
+        select,
+        textarea {
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            background: white;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="url"]:focus,
+        input[type="date"]:focus,
+        input[type="tel"]:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .file-input-group {
+            position: relative;
+        }
+
+        .file-input {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .file-input-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            border: 2px dashed #d1d5db;
+            border-radius: 8px;
+            background: #f9fafb;
+            color: #6b7280;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .file-input-label:hover,
+        .file-input-group:focus-within .file-input-label {
+            border-color: #4f46e5;
+            background: #f0f9ff;
+            color: #4f46e5;
+        }
+
+        .file-info {
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+            color: #6b7280;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            padding-top: 2rem;
+            border-top: 1px solid #e5e7eb;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: #4f46e5;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #4338ca;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
+
+        .btn-secondary {
+            background: #6b7280;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #4b5563;
+            transform: translateY(-2px);
+        }
+
+        .flash-messages {
+            margin-bottom: 1rem;
+        }
+
+        .flash {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+        }
+
+        .flash.success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+
+        .flash.error {
+            background: #fee2e2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+        }
+
+        .help-text {
+            font-size: 0.8rem;
+            color: #6b7280;
+            margin-top: 0.25rem;
+        }
+
+        .form-section {
+            border-top: 1px solid #e5e7eb;
+            padding-top: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .form-section:first-child {
+            border-top: none;
+            padding-top: 0;
+            margin-top: 0;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .nav {
+                flex-direction: column;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>➕ Add New Application</h1>
+            <p>Track your next opportunity</p>
+        </div>
+
+        <nav class="nav">
+            <a href="/">📊 Dashboard</a>
+            <a href="/applications">📋 Applications</a>
+            <a href="/add_application" class="active">➕ Add Application</a>
+            <a href="/export">📤 Export Data</a>
+        </nav>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash {{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <div class="form-container">
+            <div class="form-header">
+                <h2>New Job Application</h2>
+                <p>Fill in the details below to track this opportunity</p>
+            </div>
+
+            <div class="form-content">
+                <form method="POST" enctype="multipart/form-data">
+                    <div class="form-grid">
+                        <!-- Basic Information -->
+                        <div class="form-section">
+                            <div class="section-title">
+                                🏢 Basic Information
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="company">Company Name <span class="required">*</span></label>
+                                    <input type="text" id="company" name="company" required 
+                                           placeholder="e.g., Google, Microsoft, Startup Inc.">
+                                </div>
+                                <div class="form-group">
+                                    <label for="position">Position <span class="required">*</span></label>
+                                    <input type="text" id="position" name="position" required 
+                                           placeholder="e.g., Software Engineer, Product Manager">
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="date_applied">Date Applied <span class="required">*</span></label>
+                                    <input type="date" id="date_applied" name="date_applied" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="status">Status</label>
+                                    <select id="status" name="status">
+                                        <option value="Applied" selected>Applied</option>
+                                        <option value="Interview">Interview</option>
+                                        <option value="Offer">Offer</option>
+                                        <option value="Rejected">Rejected</option>
+                                        <option value="Withdrawn">Withdrawn</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="job_url">Job Posting URL</label>
+                                <input type="url" id="job_url" name="job_url" 
+                                       placeholder="https://company.com/careers/job-id">
+                                <div class="help-text">Link to the original job posting</div>
+                            </div>
+                        </div>
+
+                        <!-- Job Details -->
+                        <div class="form-section">
+                            <div class="section-title">
+                                💼 Job Details
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="job_location">Location</label>
+                                    <input type="text" id="job_location" name="job_location" 
+                                           placeholder="e.g., San Francisco, CA or Remote">
+                                </div>
+                                <div class="form-group">
+                                    <label for="salary_range">Salary Range</label>
+                                    <input type="text" id="salary_range" name="salary_range" 
+                                           placeholder="e.g., 80,000 - 120,000">
+                                </div>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="job_description">Job Description</label>
+                                <textarea id="job_description" name="job_description" 
+                                          placeholder="Copy and paste the job description here..."></textarea>
+                                <div class="help-text">This will help you prepare for interviews</div>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="notes">Notes</label>
+                                <textarea id="notes" name="notes" 
+                                          placeholder="Any additional notes about this application..."></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Contact Information -->
+                        <div class="form-section">
+                            <div class="section-title">
+                                👥 Contact Information
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="recruiter_name">Recruiter Name</label>
+                                    <input type="text" id="recruiter_name" name="recruiter_name" 
+                                           placeholder="e.g., John Smith">
+                                </div>
+                                <div class="form-group">
+                                    <label for="recruiter_email">Recruiter Email</label>
+                                    <input type="email" id="recruiter_email" name="recruiter_email" 
+                                           placeholder="recruiter@company.com">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="recruiter_phone">Recruiter Phone</label>
+                                <input type="tel" id="recruiter_phone" name="recruiter_phone" 
+                                       placeholder="(555) 123-4567">
+                            </div>
+                        </div>
+
+                        <!-- File Uploads -->
+                        <div class="form-section">
+                            <div class="section-title">
+                                📁 Documents
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="resume_file">Resume</label>
+                                    <div class="file-input-group">
+                                        <input type="file" id="resume_file" name="resume_file" 
+                                               class="file-input" accept=".pdf,.doc,.docx">
+                                        <div class="file-input-label">
+                                            📄 Choose Resume File
+                                        </div>
+                                    </div>
+                                    <div class="file-info">PDF, DOC, or DOCX files only</div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="cover_letter_file">Cover Letter</label>
+                                    <div class="file-input-group">
+                                        <input type="file" id="cover_letter_file" name="cover_letter_file" 
+                                               class="file-input" accept=".pdf,.doc,.docx">
+                                        <div class="file-input-label">
+                                            📝 Choose Cover Letter
+                                        </div>
+                                    </div>
+                                    <div class="file-info">PDF, DOC, or DOCX files only</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <a href="/applications" class="btn btn-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-primary">
+                            💾 Save Application
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Set default date to today
+        document.getElementById('date_applied').valueAsDate = new Date();
+
+        // File input handling
+        const fileInputs = document.querySelectorAll('.file-input');
+        fileInputs.forEach(input => {
+            input.addEventListener('change', function() {
+                const label = this.parentNode.querySelector('.file-input-label');
+                if (this.files && this.files[0]) {
+                    const fileName = this.files[0].name;
+                    const icon = this.name.includes('resume') ? '📄' : '📝';
+                    label.textContent = `${icon} ${fileName}`;
+                    label.style.color = '#059669';
+                    label.style.borderColor = '#059669';
+                } else {
+                    const defaultText = this.name.includes('resume') ? '📄 Choose Resume File' : '📝 Choose Cover Letter';
+                    label.textContent = defaultText;
+                    label.style.color = '';
+                    label.style.borderColor = '';
+                }
+            });
+        });
+
+        // Form validation
+        document.querySelector('form').addEventListener('submit', function(e) {
+            const company = document.getElementById('company').value.trim();
+            const position = document.getElementById('position').value.trim();
+            const dateApplied = document.getElementById('date_applied').value;
+
+            if (!company || !position || !dateApplied) {
+                e.preventDefault();
+                alert('Please fill in all required fields (marked with *)');
+                return;
+            }
+
+            // Check if date is not in the future
+            const selectedDate = new Date(dateApplied);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            if (selectedDate > today) {
+                e.preventDefault();
+                alert('Application date cannot be in the future');
+                document.getElementById('date_applied').focus();
+                return;
+            }
+        });
+
+        // Auto-save to localStorage (draft functionality)
+        const formElements = ['company', 'position', 'job_location', 'salary_range', 'job_description', 'notes', 'recruiter_name', 'recruiter_email', 'recruiter_phone', 'job_url'];
+        
+        // Load saved data
+        formElements.forEach(field => {
+            const savedValue = localStorage.getItem(`draft_${field}`);
+            if (savedValue) {
+                const element = document.getElementById(field);
+                if (element) element.value = savedValue;
+            }
+        });
+
+        // Save data on input
+        formElements.forEach(field => {
+            const element = document.getElementById(field);
+            if (element) {
+                element.addEventListener('input', function() {
+                    localStorage.setItem(`draft_${field}`, this.value);
+                });
+            }
+        });
+
+        // Clear draft on successful submit
+        document.querySelector('form').addEventListener('submit', function() {
+            formElements.forEach(field => {
+                localStorage.removeItem(`draft_${field}`);
+            });
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey || e.metaKey) {
+                if (e.key === 's') {
+                    e.preventDefault();
+                    document.querySelector('form').submit();
+                }
+            }
+        });
+    </script>
+</body>
+</html>

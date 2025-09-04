@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Application Tracker</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f5f7fa;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(79, 70, 229, 0.3);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .nav {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .nav a {
+            padding: 0.75rem 1.5rem;
+            background: white;
+            color: #4f46e5;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .nav a:hover, .nav a.active {
+            background: #4f46e5;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            text-align: center;
+            transition: transform 0.3s ease;
+            border-left: 4px solid #4f46e5;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #4f46e5;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #6b7280;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .chart-container {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .chart-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #374151;
+            text-align: center;
+        }
+
+        .section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .section-header {
+            padding: 1.5rem;
+            background: #f9fafb;
+            border-bottom: 1px solid #e5e7eb;
+            font-weight: 600;
+            color: #374151;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .section-content {
+            padding: 1.5rem;
+        }
+
+        .recent-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .recent-item:last-child {
+            border-bottom: none;
+        }
+
+        .recent-info h4 {
+            color: #374151;
+            margin-bottom: 0.25rem;
+        }
+
+        .recent-meta {
+            font-size: 0.85rem;
+            color: #6b7280;
+        }
+
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .status-applied { background: #dbeafe; color: #1e40af; }
+        .status-interview { background: #fef3c7; color: #92400e; }
+        .status-offer { background: #d1fae5; color: #065f46; }
+        .status-rejected { background: #fee2e2; color: #dc2626; }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            background: #4f46e5;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-block;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: #4338ca;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #6b7280;
+        }
+
+        .btn-secondary:hover {
+            background: #4b5563;
+        }
+
+        .flash-messages {
+            margin-bottom: 1rem;
+        }
+
+        .flash {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+        }
+
+        .flash.success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+
+        .flash.error {
+            background: #fee2e2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #6b7280;
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav {
+                flex-direction: column;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .recent-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 Job Application Tracker</h1>
+            <p>Stay organized and land your dream job</p>
+        </div>
+
+        <nav class="nav">
+            <a href="/" class="active">📊 Dashboard</a>
+            <a href="/applications">📋 Applications</a>
+            <a href="/add_application">➕ Add Application</a>
+            <a href="/export">📤 Export Data</a>
+        </nav>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash {{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">{{ total_applications }}</div>
+                <div class="stat-label">Total Applications</div>
+            </div>
+            {% for status in status_counts %}
+                <div class="stat-card">
+                    <div class="stat-value">{{ status.count }}</div>
+                    <div class="stat-label">{{ status.status }}</div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="charts-grid">
+            <div class="chart-container">
+                <div class="chart-title">Application Timeline</div>
+                <canvas id="timelineChart" width="400" height="300"></canvas>
+            </div>
+            <div class="chart-container">
+                <div class="chart-title">Status Breakdown</div>
+                <canvas id="statusChart" width="400" height="300"></canvas>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <span>Recent Applications</span>
+                <a href="/applications" class="btn btn-secondary">View All</a>
+            </div>
+            <div class="section-content">
+                {% if recent_apps %}
+                    {% for app in recent_apps %}
+                        <div class="recent-item">
+                            <div class="recent-info">
+                                <h4>{{ app.position }} at {{ app.company }}</h4>
+                                <div class="recent-meta">Applied {{ app.date_applied }}</div>
+                            </div>
+                            <span class="status-badge status-{{ app.status.lower().replace(' ', '') }}">
+                                {{ app.status }}
+                            </span>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📝</div>
+                        <h3>No applications yet</h3>
+                        <p>Start tracking your job search by adding your first application!</p>
+                        <a href="/add_application" class="btn">Add Application</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        {% if upcoming_interviews %}
+        <div class="section">
+            <div class="section-header">
+                <span>Upcoming Interviews</span>
+            </div>
+            <div class="section-content">
+                {% for interview in upcoming_interviews %}
+                    <div class="recent-item">
+                        <div class="recent-info">
+                            <h4>{{ interview.position }} at {{ interview.company }}</h4>
+                            <div class="recent-meta">
+                                {{ interview.interview_date }} - {{ interview.interview_type }}
+                                {% if interview.interviewer_name %} with {{ interview.interviewer_name }}{% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        {% if pending_reminders %}
+        <div class="section">
+            <div class="section-header">
+                <span>Pending Reminders</span>
+            </div>
+            <div class="section-content">
+                {% for reminder in pending_reminders %}
+                    <div class="recent-item">
+                        <div class="recent-info">
+                            <h4>{{ reminder.company }} - {{ reminder.position }}</h4>
+                            <div class="recent-meta">{{ reminder.reminder_date }}: {{ reminder.message }}</div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <script>
+        // Fetch chart data and render charts
+        fetch('/api/dashboard-data')
+            .then(response => response.json())
+            .then(data => {
+                renderTimelineChart(data.timeline);
+                renderStatusChart(data.status);
+            })
+            .catch(error => {
+                console.error('Error loading chart data:', error);
+            });
+
+        function renderTimelineChart(timelineData) {
+            const ctx = document.getElementById('timelineChart').getContext('2d');
+            
+            if (timelineData.length === 0) {
+                ctx.font = "16px Arial";
+                ctx.fillStyle = "#999";
+                ctx.textAlign = "center";
+                ctx.fillText("No data available", ctx.canvas.width/2, ctx.canvas.height/2);
+                return;
+            }
+            
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: timelineData.map(d => d.month),
+                    datasets: [{
+                        label: 'Applications',
+                        data: timelineData.map(d => d.count),
+                        borderColor: '#4f46e5',
+                        backgroundColor: 'rgba(79, 70, 229, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderStatusChart(statusData) {
+            const ctx = document.getElementById('statusChart').getContext('2d');
+            
+            if (statusData.length === 0) {
+                ctx.font = "16px Arial";
+                ctx.fillStyle = "#999";
+                ctx.textAlign = "center";
+                ctx.fillText("No data available", ctx.canvas.width/2, ctx.canvas.height/2);
+                return;
+            }
+            
+            const colors = {
+                'Applied': '#3b82f6',
+                'Interview': '#f59e0b',
+                'Offer': '#10b981',
+                'Rejected': '#ef4444',
+                'Withdrawn': '#6b7280'
+            };
+            
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: statusData.map(d => d.status),
+                    datasets: [{
+                        data: statusData.map(d => d.count),
+                        backgroundColor: statusData.map(d => colors[d.status] || '#6b7280'),
+                        borderWidth: 2,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                usePointStyle: true
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
