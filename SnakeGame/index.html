@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake Game - Classic Arcade</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <div class="header">
+            <h1>🐍 Snake Game</h1>
+            <div class="score-container">
+                <div class="score-item">
+                    <span class="label">Score:</span>
+                    <span id="score">0</span>
+                </div>
+                <div class="score-item">
+                    <span class="label">High Score:</span>
+                    <span id="highScore">0</span>
+                </div>
+                <div class="score-item">
+                    <span class="label">Level:</span>
+                    <span id="level">1</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="game-area">
+            <canvas id="gameCanvas" width="400" height="400"></canvas>
+            
+            <div class="game-overlay" id="gameOverlay">
+                <div class="overlay-content">
+                    <h2 id="overlayTitle">Welcome to Snake!</h2>
+                    <p id="overlayMessage">Use arrow keys or WASD to control the snake</p>
+                    <div class="controls-info">
+                        <div class="control-item">
+                            <span class="key">↑ W</span>
+                            <span>Up</span>
+                        </div>
+                        <div class="control-item">
+                            <span class="key">↓ S</span>
+                            <span>Down</span>
+                        </div>
+                        <div class="control-item">
+                            <span class="key">← A</span>
+                            <span>Left</span>
+                        </div>
+                        <div class="control-item">
+                            <span class="key">→ D</span>
+                            <span>Right</span>
+                        </div>
+                        <div class="control-item">
+                            <span class="key">SPACE</span>
+                            <span>Pause</span>
+                        </div>
+                    </div>
+                    <button id="startButton" class="game-button">Start Game</button>
+                    <button id="restartButton" class="game-button hidden">Play Again</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="mobile-controls">
+            <div class="control-row">
+                <button class="control-btn" id="upBtn">↑</button>
+            </div>
+            <div class="control-row">
+                <button class="control-btn" id="leftBtn">←</button>
+                <button class="control-btn" id="pauseBtn">⏸</button>
+                <button class="control-btn" id="rightBtn">→</button>
+            </div>
+            <div class="control-row">
+                <button class="control-btn" id="downBtn">↓</button>
+            </div>
+        </div>
+
+        <div class="stats">
+            <div class="stat-item">
+                <span class="stat-label">Snake Length:</span>
+                <span id="snakeLength">1</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Speed:</span>
+                <span id="gameSpeed">Normal</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Food Eaten:</span>
+                <span id="foodEaten">0</span>
+            </div>
+        </div>
+
+        <div class="achievements" id="achievements">
+            <!-- Achievements will be added dynamically -->
+        </div>
+
+        <div class="footer">
+            <p>🎮 Classic Snake Game Clone - Use arrow keys or WASD to play!</p>
+            <p>Eat food to grow longer and increase your score. Don't hit the walls or yourself!</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
